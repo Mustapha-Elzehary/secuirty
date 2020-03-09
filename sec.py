@@ -2,13 +2,14 @@
 
 
 def getGeneratedKeyVig(word):
-    vigGlobalKey = "key"
+    vigGlobalKey = "CRYKEYUNIQUE"
     generatedKey, currIndex = "", 0
     for i in range(len(word)):
         if (currIndex >= len(vigGlobalKey)):
             currIndex = 0
         generatedKey += vigGlobalKey[currIndex]
         currIndex += 1
+    return generatedKey
 
 
 def encVig(word):
@@ -19,7 +20,6 @@ def encVig(word):
         if (word[i].islower()):
             encWord += chr(((ord(word[i].upper()) - 65) + (ord(genKey[i]) - 65)) % 26 + 65)
         else:
-            print ((((ord(word[i]) - 65) + (ord(genKey[i]) - 65)) % 26 + 65))
             encWord += chr(((ord(word[i]) - 65) + (ord(genKey[i]) - 65)) % 26 + 65)
     return encWord
 
