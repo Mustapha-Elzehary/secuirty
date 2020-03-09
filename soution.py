@@ -1,5 +1,5 @@
 import sys
-from os import open
+
 
 
 
@@ -12,16 +12,17 @@ def encShift(inFilePath, outFilePath, shift):
 
     for eachLine in fileIn:
         for eachChar in eachLine:
-            if eachChar == "\n" or eachChar == " " or eachChar.isdigit():
+            if eachChar.isalpha():
+                if (eachChar.isupper()):
+                    outString += chr((ord(eachChar.lower()) + shift - 65) % 26 + 65).upper()
+                else:
+                    outString += chr((ord(eachChar.lower()) + shift - 65) % 26 + 65)
+            else:
                 outString += eachChar
 
-            if (eachChar.isupper()):
-                outString += chr((ord(eachChar) + shift - 65) % 26 + 65)
-            else:
-                outString += chr((ord(eachChar) + shift - 97) % 26 + 97)
 
-
-    fileOut.write(outString);
+    fileOut.write(outString)
+    fileOut.close()
 
 
 def decShift(inFilePath, outFilePath, shift):
@@ -33,15 +34,17 @@ def decShift(inFilePath, outFilePath, shift):
 
     for eachLine in fileIn:
         for eachChar in eachLine:
-            if eachChar == "\n" or eachChar == " " or eachChar.isdigit():
+            if eachChar.isalpha():
+                if (eachChar.isupper()):
+                    outString += (chr((ord(eachChar.lower()) - 65 -shift + 26) % 26 + 65)).upper()
+                else:
+                    outString += chr((ord(eachChar.lower()) - 65 - shift + 26) % 26 + 65)
+            else:
                 outString += eachChar
 
-            if (eachChar.isupper()):
-                outString += chr((ord(eachChar) + shift - 65) % 26 + 65)
-            else:
-                outString += chr((ord(eachChar) + shift - 97) % 26 + 97)
 
-    fileOut.write(outString);
+
+    fileOut.write(outString)
 
 
 
@@ -51,9 +54,7 @@ def encAffine(inFilePath, outFilePath, a, b):
         if a % i == 0 and 26 % i == 0:
             return
 
-    if gcd(a, 26) != 1:
-        print ("The two numbers must have no common divisor")
-        return
+
 
     fileIn = open(inFilePath, "r")
     fileOut = open(outFilePath, "a")
@@ -63,7 +64,7 @@ def encAffine(inFilePath, outFilePath, a, b):
         for eachChar in eachLine:
             if eachChar.isalpha():
                 if (eachChar.isupper()):
-                    outString +=  chr(((a * (ord(eachChar.lower()) - 65)) + b) % 26 + 65).upper()
+                    outString +=  (chr(((a * (ord(eachChar.lower()) - 65)) + b) % 26 + 65)).upper()
                 else:
                     outString +=  chr(((a * (ord(eachChar) - 65)) + b) % 26 + 65)
             else:
@@ -145,7 +146,7 @@ def decVig(inFilePath, outFilePath, token):
     fileOut.write(outString);
 
 
-def start():
+def main():
     options = list(sys.argv)
 
     if len(options) < 6 :
@@ -153,17 +154,17 @@ def start():
 
     if options[1] == "shift":
         if(options[2] == "enc"):
-            encShift(options[3], options[4], options[5])
+            encShift(options[3], options[4], int(options[5]))
         else:
-            decShift(options[3], options[4], options[5])
+            decShift(options[3], options[4], int(options[5]))
 
 
 
     if options[1] == "affine":
         if(options[2] == "enc"):
-            encAffine(options[3], options[4], options[5], options[6])
+            encAffine(options[3], options[4], int(options[5]), int(options[6]))
         else:
-            decAffine(options[3], options[4], options[5], options[6])
+            decAffine(options[3], options[4], int(options[5]), int(options[6]))
 
 
     if options[1] == "vigenere":
@@ -176,7 +177,7 @@ def start():
 
 
 if __name__ == '__main__':
-    start()
+    main()
 
 
 
